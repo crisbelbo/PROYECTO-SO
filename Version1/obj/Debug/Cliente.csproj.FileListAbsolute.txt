@@ -2,8 +2,6 @@ C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\bin\Debug\Version1.exe.c
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\bin\Debug\Version1.exe
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\bin\Debug\Version1.pdb
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Cliente.csproj.AssemblyReference.cache
-C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.Consultas_BD.resources
-C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.Registro.resources
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.IniciarSesion.resources
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.Properties.Resources.resources
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Cliente.csproj.GenerateResource.cache

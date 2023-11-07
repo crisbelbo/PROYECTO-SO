@@ -41,6 +41,30 @@ typedef struct{ //Lista de Conectados
 ListaConectados milista;
 
 //FUNCIONES PARA LA LISTA DE CONECTADOS:
+//HACER FUNCION PARA DAR NUMERO DE USUARIOS DE LA BASE DE DATOS, UNA CONSULTA, Y LUEGO EN EL ID +1
+int DameID(char consulta[100], char respuesta4[100])
+{
+	sprintf(consulta, "SELECT COUNT(jugadores.username)FROM jugadores");
+	//recogemos el resultado de la consulta 
+	err=mysql_query (conn, consulta);
+	
+	if(err!=0)
+	{
+		printf ("Error al consultar datos de la base %u %s\n", mysql_errno(conn),mysql_error(conn));
+		exit(1);
+	}
+	resultado = mysql_store_result (conn); 
+	row = mysql_fetch_row (resultado);
+	if (row == NULL)
+		printf ("No se han obtenido datos en la consulta\n");
+	else
+	{
+		//El resultado debe ser una matriz con una sola fila
+		//y una columna que contiene el numero de partidas
+		printf ("Numero de jugadores registrados: %s\n", row[0]);
+		sprintf(respuesta4, "%s", row[0]);
+	}
+}
 
 int AnadeConectado (ListaConectados *lista, char nombre[20], int socket) //Añade a la lista un nuevo usuario conectado
 {
@@ -62,7 +86,7 @@ int AnadeConectado (ListaConectados *lista, char nombre[20], int socket) //Añade
 /*{*/
 /*	int i=0;*/
 /*	int encontrado=0;*/
-	/*printf("Bienvenido, %d, %s,%d\n",sock_conn, usuario,milista->num);*/
+/*printf("Bienvenido, %d, %s,%d\n",sock_conn, usuario,milista->num);*/
 /*	while(i<milista->num && encontrado==0)*/
 /*	{*/
 /*		printf("%d\n",milista->conectados[i].socket);*/
@@ -87,11 +111,13 @@ void Conectados(ListaConectados *lista, char conectados[300]) //Pone en el vecto
 	//printf("Conectados: %s\n", conectados);
 	for(i=0; i<lista->num; i++)
 	{
-		sprintf(conectados, "%s/%s",conectados, lista->conectados[i].nombre);
+		sprintf(conectados, "%s/%s",conectados, lista->conectados[i].nombre); //%s, conectados
 		//printf("Conectados: %s\n", conectados);
 	}
 	printf("%s\n",conectados);
 }
+
+
 
 //Función para saber la posicion de ese usuario mediante el socket
 int GetSocket (ListaConectados *lista, char nombre[20])
@@ -122,12 +148,13 @@ int GetSocket (ListaConectados *lista, char nombre[20])
 //FUNCIONES PARA LAS CONSULTAS:
 
 //Funcion que devuelve cuantas partidas ha ganado X jugador
-int DameNumPartidasGanadas(char jugador1[20], char consulta[100], char respuesta3[512])
+int DameNumPartidasGanadas(char jugador[20], char consulta[100], char respuesta3[512])
 {
-	sprintf(consulta,"SELECT COUNT(partidas.id_partidas) FROM jugadores, participaciones, partidas WHERE jugadores.username = '%s'  AND jugadores.id_jugador = participaciones.id_jugador AND participaciones.id_partida = partidas.id_partidas", jugador1);
+	sprintf(consulta,"SELECT COUNT(partidas.id_partidas) FROM jugadores, participaciones, partidas WHERE jugadores.username = '%s' AND jugadores.id_jugador = participaciones.id_jugador AND participaciones.id_partida = partidas.id_partidas", jugador);
 	printf ("consulta: %s\n", consulta);
 	//recogemos el resultado de la consulta 
-	err=mysql_query (conn, consulta); 
+	err=mysql_query (conn, consulta);
+	
 	if(err!=0)
 	{
 		printf ("Error al consultar datos de la base %u %s\n", mysql_errno(conn),mysql_error(conn));
@@ -137,10 +164,11 @@ int DameNumPartidasGanadas(char jugador1[20], char consulta[100], char respuesta
 	row = mysql_fetch_row (resultado);
 	if (row == NULL)
 		printf ("No se han obtenido datos en la consulta\n");
-	else{
+	else
+	{
 		//El resultado debe ser una matriz con una sola fila
 		//y una columna que contiene el numero de partidas
-		//printf ("Numero de partidas: %s\n", row[0] );
+		printf ("Numero de partidas: %s\n", row[0]);
 		sprintf(respuesta3, "%s", row[0]);
 	}
 	
@@ -149,29 +177,33 @@ int DameNumPartidasGanadas(char jugador1[20], char consulta[100], char respuesta
 //FUNCIONES INICIALES, INICIO SESION, REGISTRO ETC
 
 //Función para registrar a un nuevo usuario
-int Registro (char usuario[20],char contrasena[20], char respuesta2[512], char consulta[80]) 
+int Registro (char usuario[20],char contrasena[20], char respuesta2[512], char consulta[80], int id) 
 {
+	
 	printf ("Nombre: %s, Contraseña: %s\n", usuario, contrasena);
 	sprintf(consulta, "SELECT jugadores.username FROM jugadores WHERE jugadores.username='%s' ",usuario);
-	// hacemos la consultapara saber si ese usuario ya está registrado
+	// hacemos la consulta para saber si ese usuario ya está registrado
 	int err =mysql_query (conn, consulta);
 	if (err!=0)
 	{
 		printf ("Error al consultar datos de la base %u %s\n", mysql_errno(conn), mysql_error(conn));
 		exit (1);
 	}
-	
+	id = DameID(consulta, respuesta2)+1;
 	//Recogemos el resultado
 	resultado = mysql_store_result (conn);
 	row=mysql_fetch_row(resultado);
+	printf("row: %s\n", row);
+	
 	if (row==NULL)
 	{
-		printf("Voy a añadir este usuario: %s\n", usuario); //AQUÍ PETA EL REGISTRO
-		int idJugador = atoi(row[0])+1;
+		printf("Voy a añadir este usuario: %s\n", usuario);
+		printf("%s\n", row[0]);
+		/*int idJugador = atoi(row[0]);*/
 		char insert[150];
-		sprintf(insert,"INSERT INTO jugadores(id_jugador,username,pass) VALUES (%d,'%s','%s')",idJugador,usuario,contrasena);
+		sprintf(insert,"INSERT INTO jugadores VALUES(%d,'%s','%s');",id,usuario,contrasena); //Para que el Id sea la siguiente posición libre
+		err=mysql_query(conn, insert);
 		
-		err=mysql_query (conn, insert);
 		if (err!=0)
 		{
 			printf ("Error al insertar datos de la base %u %s\n", mysql_errno(conn), mysql_error(conn));
@@ -186,7 +218,7 @@ int Registro (char usuario[20],char contrasena[20], char respuesta2[512], char c
 	}
 	else
 	{
-		sprintf(respuesta2,"2/No se ha registrado el nuevo usuario");
+		sprintf(respuesta2,"2/No se ha podido acceder a la base de datos");
 	} 
 	
 }
@@ -212,7 +244,7 @@ void InicioSesion(char usuario[20], char contrasena[20], char consulta[80], char
 	else
 	{
 		printf("Inicio de sesion completado \n");
-		sprintf(respuesta1,"1/CORRECTO");
+		sprintf(respuesta1,"1/INICIO DE SESION COMPLETADO");
 		printf("%s,%s,%d \n",conectado,usuario,sock_conn);
 		pthread_mutex_lock( &mutex );
 		AnadeConectado(&milista,usuario,sock_conn);
@@ -262,13 +294,16 @@ void *Atencion(void*socket)
 	int ret;
 	char peticion[512];
 	char respuesta[512];
-	char usuario[80];
-	char contrasena[80];
+	/*	char usuario[80];*/	
+	
 	
 	int terminar = 0;
 	
 	while(terminar == 0) //Bucle de atencion al cliente
 	{
+		char usuario[80];
+		char contrasena[80];
+		int id;
 		
 		ret = read(sock_conn, peticion, sizeof(peticion));
 		printf("Recibido \n");
@@ -298,7 +333,7 @@ void *Atencion(void*socket)
 			write (sock_conn,respuesta, strlen(respuesta));
 		}
 		
-	    else if (codigo == 1) //Inicio de sesión
+		else if (codigo == 1) //Inicio de sesión
 		{
 			p=strtok(NULL,"/");
 			strcpy(usuario,p);
@@ -307,7 +342,7 @@ void *Atencion(void*socket)
 			
 			if(desconectar==1)
 			{
-				AnadeConectado(&milista, usuario, sock_conn);
+				AnadeConectado(&milista,usuario, sock_conn);
 			}
 			
 			InicioSesion(usuario,contrasena, consulta, respuesta, codigo, conectado,sock_conn); //Lamamos a la funcion InicioSesion
@@ -315,7 +350,7 @@ void *Atencion(void*socket)
 			Conectados(&milista,conectado);
 			printf("Ya tengo conectados: %s\n",conectado);
 			
-			printf("Respuesta: %s \n", respuesta);
+		/*	printf("Respuesta: %s \n", respuesta);*/
 			
 			desconectar=0;
 			write(sock_conn, respuesta, strlen(respuesta));
@@ -326,10 +361,11 @@ void *Atencion(void*socket)
 			strcpy (usuario, p);
 			p = strtok( NULL, "/");
 			strcpy(contrasena,p);
-			Registro(usuario,contrasena, respuesta, consulta);
-			// Enviamos la respuesta
+			Registro(usuario,contrasena, respuesta, consulta, id);
+			//Enviamos la respuesta
 			printf("Respuesta: %s \n", respuesta);
 			write (sock_conn,respuesta, strlen(respuesta));
+			
 		}
 		else if(codigo ==3) //Consulta 1
 		{
@@ -338,8 +374,20 @@ void *Atencion(void*socket)
 			DameNumPartidasGanadas(usuario,consulta,respuesta);
 			// Enviamos la respuesta
 			printf("Ha ganado: %s partidas\n", respuesta);
-			write (sock_conn,respuesta, strlen(respuesta));
+			write (sock_conn, respuesta, strlen(respuesta));
 			
+		}
+		
+		else if(codigo==5) //Lista de conectados
+		{
+			printf("Voy a arrancar los nombres de usuario\n");
+			Conectados(&milista, respuesta);
+			printf("%s", &milista);
+			printf("La respuesta es: %s", respuesta);
+			sprintf(respuesta, "5/%s", &milista);
+			
+			//Código para que pase la lista de conecctados
+			write(sock_conn,respuesta,strlen(respuesta));
 		}
 		
 		else if(codigo ==6) //Consulta 3
@@ -353,24 +401,20 @@ void *Atencion(void*socket)
 			
 		}
 		
-		else if (codigo ==4) //Cuantos servicios se han hecho
-		{
-			sprintf (respuesta,"%d",contador);
-			printf("Respuesta: %s \n", respuesta);
-			write (sock_conn,respuesta, strlen(respuesta));
-		}
-
-		
-		if (codigo != 0) 
-		{
-			// Enviamos la respuesta
-			write(sock_conn, respuesta, strlen(respuesta));
-		}
-		if ((codigo == 1) || (codigo == 2) || (codigo == 3)) //Contador de servicios
+		if ((codigo == 1) || (codigo == 2) || (codigo == 3) || (codigo == 5) || (codigo == 6)) //Contador de servicios
 		{
 			pthread_mutex_lock(&mutex); //No me interrumpas ahora
 			contador = contador + 1;
 			pthread_mutex_unlock(&mutex); //ya puedes interrumpirme
+			//notificamos a los clientes conectados
+			char notificacion[20];
+			sprintf(notificacion, "4/%d", contador);
+			int j;
+			for(j=0; j<i;j++)
+			{
+				write(sockets[j], notificacion, strlen(notificacion));
+			}
+			printf("%d", contador);
 		}
 		
 	}
@@ -389,7 +433,7 @@ int main(int argc, char **argv)
 	serv_adr.sin_family = AF_INET;
 	
 	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serv_adr.sin_port = htons(9190);
+	serv_adr.sin_port = htons(9005);
 	if(bind(sock_listen, (struct sockaddr *)&serv_adr, sizeof(serv_adr))<0)
 		printf("Error al bind \n");
 	
@@ -416,6 +460,7 @@ int main(int argc, char **argv)
 	contador=0;
 	pthread_t thread;
 	i=0;
+	char usuario[20];
 	
 	for(;;) //bucle para atender a los clientes
 	{
@@ -426,13 +471,15 @@ int main(int argc, char **argv)
 		
 		sockets[i]=sock_conn; //Socket que usaremos para este cliente
 		
-		AnadeConectado(&milista,"usuario",sock_conn);
+		AnadeConectado(&milista,usuario,sock_conn);
 		
 		pthread_create(&thread, NULL, Atencion,&milista.conectados[milista.num-1].socket); //Crear Thread
-		i=i+1;
-	
-	}
-	
+		i=i+1;	
+	}	
 }
+
+
+
+
 
 
