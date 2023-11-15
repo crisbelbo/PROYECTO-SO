@@ -52,6 +52,9 @@ namespace Version1
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.Jugar = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -94,6 +97,7 @@ namespace Version1
             // 
             this.textBox2.Location = new System.Drawing.Point(195, 129);
             this.textBox2.Name = "textBox2";
+            this.textBox2.PasswordChar = '*';
             this.textBox2.Size = new System.Drawing.Size(145, 26);
             this.textBox2.TabIndex = 4;
             // 
@@ -125,6 +129,7 @@ namespace Version1
             this.dataGridView1.RowTemplate.Height = 28;
             this.dataGridView1.Size = new System.Drawing.Size(490, 255);
             this.dataGridView1.TabIndex = 27;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // label5
             // 
@@ -142,7 +147,7 @@ namespace Version1
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(1077, 359);
+            this.label6.Location = new System.Drawing.Point(1109, 359);
             this.label6.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label6.MaximumSize = new System.Drawing.Size(50, 100);
             this.label6.MinimumSize = new System.Drawing.Size(50, 50);
@@ -265,11 +270,43 @@ namespace Version1
             this.label12.TabIndex = 37;
             this.label12.Text = "Registrate para poder iniciar sesión:";
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(941, 375);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(155, 20);
+            this.label13.TabIndex = 45;
+            this.label13.Text = "Número de servicios:";
+            // 
+            // Jugar
+            // 
+            this.Jugar.Location = new System.Drawing.Point(461, 196);
+            this.Jugar.Name = "Jugar";
+            this.Jugar.Size = new System.Drawing.Size(146, 41);
+            this.Jugar.TabIndex = 46;
+            this.Jugar.Text = "Vamos a jugar!";
+            this.Jugar.UseVisualStyleBackColor = true;
+            this.Jugar.Click += new System.EventHandler(this.Jugar_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(741, 359);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(146, 41);
+            this.button1.TabIndex = 47;
+            this.button1.Text = "Lista Conectados";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // IniciarSesion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1231, 787);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Jugar);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.AceptarRegistro);
             this.Controls.Add(this.contraseñaIn);
             this.Controls.Add(this.usuarioIn);
@@ -327,5 +364,8 @@ namespace Version1
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button Jugar;
+        private System.Windows.Forms.Button button1;
     }
 }

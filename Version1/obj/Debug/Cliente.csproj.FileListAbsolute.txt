@@ -8,3 +8,4 @@ C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Cliente.csproj
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Cliente.csproj.CoreCompileInputs.cache
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.exe
 C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.pdb
+C:\Users\crisb\Desktop\SO\PROYECTO_SO\Version1\Version1\obj\Debug\Version1.Juego.resources
