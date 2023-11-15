@@ -1,6 +1,6 @@
 # PROYECTO-SO
 Proyecto
-Video versión 3 hecho por Laura
-https://youtu.be/p7x8m95UcQ8
-Versión verificada por Queralt
+Video versión 4 hecho por Cristina
+LINK AL VÍDEO: https://www.youtube.com/watch?v=OcfveKV1mYI
+Versión verificada
 Versión subida a GitHub por Cristina
