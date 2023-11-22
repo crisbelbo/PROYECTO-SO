@@ -35,9 +35,11 @@ namespace Version1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(800, 686);
             this.Name = "Juego";
             this.Text = "Dobble";
+            this.Load += new System.EventHandler(this.Juego_Load);
             this.ResumeLayout(false);
 
         }
